@@ -46,7 +46,7 @@ class Graph {
             double ompstop;
             auto start = std::chrono::steady_clock::now();
             
-            //Pętla powtarzająca obliczenia dodana w 4 wersji kodu
+            //Repeat process to try finding a better result
             for (int n=0; n<MAX_ITER; ++n){    
                 colored[0] = 0;
                 for (int i=1; i<V; ++i) {
@@ -55,17 +55,16 @@ class Graph {
                 toColor = true;       
                 while (toColor){
 
-                    //Próba zrównoleglenia algorytmu sekwencyjnego (1 wersja kodu)
+                    //Parallel coloring
                     #pragma omp parallel
                     {   
                         bool neighColor[V];
-                        //Dyrektywy schedule dodane w 5 wersji kodu
-                        //Dodatkowa równoległa pętla dodana w 3 wersji kodu
+                        //Set all verticies to no color
                         #pragma omp for schedule(static)
                         for (int i=0; i<V; ++i){
                             neighColor[i] = false;
                         }
-                        //W 1 wersji kodu równoległa jedynie ta pętla
+                        //Color all verticies with the forst available color
                         #pragma omp for schedule(static)
                         for (int i=1; i<V; ++i) {
                             if (colored[i] != -1){
@@ -98,7 +97,7 @@ class Graph {
                     
                     toColor = false;
 
-                    //Wykrywanie błędnego pokolorowania spowodowanego równoległością dodane w 2 wersji kodu  
+                    //Check if coloring is valid
                     #pragma omp parallel for schedule(static) //reduction(+:toColor)
                     for (int i=0; i<V; ++i) {
                         std::list<int>::iterator j;

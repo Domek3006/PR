@@ -1,7 +1,3 @@
-# Przetwarzanie Równoległe
-(Politechnika Poznańska, informatyka, sem. VI)
+# Parallel Graph Coloring
 
-Kolorowanie grafu z wykorzystaniem technologii OpenMP
-
-Autor: Dominik Pawłowski
- 
+Graph coloring using OpenMP
